@@ -1,0 +1,14 @@
+# Never publish the unencrypted family data
+*.xlsx
+~$*
+foto/
+tools/site.config.json
+
+node_modules/
+
+# local preview settings for Claude
+.claude/
+
+# contain family names in plain text - keep on this PC only
+DESIGN.md
+tools/convert-chart.mjs
