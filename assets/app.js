@@ -83,10 +83,10 @@ function render() {
   for (const c of view.cards) {
     let node;
     if (c.kind === 'ph') {
-      node = el('div', { class: 'card ph', 'aria-hidden': 'true' }, 'Partener', el('br'), 'necunoscut');
+      node = el('div', { class: 'card ph', 'aria-hidden': 'true' }, 'partener', el('br'), 'necunoscut');
     } else {
       const p = model.people.get(c.id);
-      node = el('button', { class: 'card', type: 'button', 'data-id': p.id, title: displayName(p) },
+      node = el('button', { class: 'card' + (p.sex ? ' sex-' + p.sex : ''), type: 'button', 'data-id': p.id, title: displayName(p) },
         el('span', { class: 'c-name' + (isUnnamed(p) ? ' unnamed' : ''), text: displayName(p) }),
         p.porecla ? el('span', { class: 'c-meta', text: `„${p.porecla}”` }) : null,
         lifeLine(p) ? el('span', { class: 'c-meta', text: lifeLine(p) }) : null,
@@ -98,7 +98,7 @@ function render() {
     cardEls.set(c.id, node);
   }
   for (const g of view.gens) {
-    cards.append(el('div', { class: 'gen-label', text: `Gen. ${g}`, style: `left:0;top:${view.rowY(g) + CARD_H / 2 - 10}px` }));
+    cards.append(el('div', { class: 'gen-label', text: `Generația ${g}`, style: `left:0;top:${view.rowY(g) + CARD_H / 2 - 12}px` }));
   }
   const svg = $('lines');
   svg.setAttribute('width', view.width + PAD * 2);

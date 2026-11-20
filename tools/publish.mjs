@@ -16,7 +16,8 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONFIG = path.join(root, 'tools', 'site.config.json');
-const DATA_FILE = path.join(root, 'data', 'tree.enc');
+// STAROVNIC_DATA_DIR: write somewhere else (used for test previews, so the real data/ is never touched)
+const DATA_FILE = path.join(process.env.STAROVNIC_DATA_DIR || path.join(root, 'data'), 'tree.enc');
 const PHOTO_DIR_OUT = path.join(root, 'photos');
 const ITERATIONS = 600_000;
 
@@ -197,5 +198,5 @@ fs.writeFileSync(DATA_FILE, JSON.stringify({
   salt: salt.toString('base64'), iv: iv.toString('base64'), ct: ct.toString('base64'),
 }));
 
-console.log(`\nGata: ${payload.people.length} persoane, ${payload.couples.length} cupluri, ${photoCount} fotografii → data/tree.enc`);
+console.log(`\nGata: ${payload.people.length} persoane, ${payload.couples.length} cupluri, ${photoCount} fotografii → ${path.relative(root, DATA_FILE)}`);
 if (warnings.length) console.log(`\nAtenție (${warnings.length}):\n  • ` + warnings.join('\n  • '));

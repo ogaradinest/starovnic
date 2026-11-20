@@ -12,8 +12,11 @@ const TYPES = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; ch
 
 http.createServer((req, res) => {
   let rel = decodeURIComponent(new URL(req.url, 'http://x').pathname).replace(/^\/+/, '') || 'index.html';
-  const file = path.join(root, rel);
-  if (!file.startsWith(root) || !PUBLIC.some((p) => rel === p || rel.startsWith(p)) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
+  let base = root;
+  // STAROVNIC_DATA_DIR: serve data/ from a test folder instead of the real one
+  if (process.env.STAROVNIC_DATA_DIR && rel.startsWith('data/')) { base = path.resolve(process.env.STAROVNIC_DATA_DIR); rel = rel.slice(5); }
+  const file = path.join(base, rel);
+  if (!file.startsWith(base) || !(base !== root || PUBLIC.some((p) => rel === p || rel.startsWith(p))) || !fs.existsSync(file) || fs.statSync(file).isDirectory()) {
     res.writeHead(404, { 'content-type': 'text/plain' }); return res.end('404');
   }
   res.writeHead(200, { 'content-type': TYPES[path.extname(file)] || 'application/octet-stream', 'cache-control': 'no-cache' });
